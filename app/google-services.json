@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1090870033235",
+    "project_id": "matrix-solver-28e46",
+    "storage_bucket": "matrix-solver-28e46.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090870033235:android:eaaed406944be6fc073fa6",
+        "android_client_info": {
+          "package_name": "com.matrix1.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1090870033235-pjefpbv6m3vh2o0a1algb0sal2ac3vns.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAiwc1xTk8GfkUgpl_RNa1hEpmthZ9vj8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1090870033235-pjefpbv6m3vh2o0a1algb0sal2ac3vns.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

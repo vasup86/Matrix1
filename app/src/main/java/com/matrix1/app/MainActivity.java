@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.text.FirebaseVisionText;
+import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,15 +69,35 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == pic_id){
-            Bundle bundle = data.getExtras();
-            Bitmap photo = (Bitmap) bundle.get("data"); //from bundle, extract image
-            click_image_id.setImageBitmap(photo); //set the image in the imageview
-        }
+
+        Bundle bundle = data.getExtras();
+        Bitmap photo = (Bitmap) bundle.get("data"); //from bundle, extract image
+        click_image_id.setImageBitmap(photo); //set the image in the imageview
 
         //process the image to extract the
-
-
+        //1. To create a FirebaseVisionImage object from a Bitmap object:
+        FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(photo);
+        //2. Get an instance of FirebaseVision
+        FirebaseVision firebaseVision = FirebaseVision.getInstance();
+        //3. Create an instance of FirebaseVisionRecognizer
+        FirebaseVisionTextRecognizer firebaseVisionTextRecognizer = firebaseVision.getOnDeviceTextRecognizer();
+        //4. Create a task to process the image.
+        Task<FirebaseVisionText> task = firebaseVisionTextRecognizer.processImage(firebaseVisionImage);
+        //5. if the task is success
+        task.addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
+            @Override
+            public void onSuccess(@NonNull FirebaseVisionText firebaseVisionText) {
+                String s = firebaseVisionText.getText();
+                picText.setText(s);
+            }
+        });
+        //6. if the task failed.
+        task.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
         super.onActivityResult(requestCode, resultCode, data);
     }
 }
